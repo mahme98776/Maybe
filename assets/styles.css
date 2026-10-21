@@ -1,451 +1,191 @@
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --bg: #f5f7fb;
-  --panel: #ffffff;
-  --panel-alt: #edf3ff;
-  --primary: #113c8c;
-  --primary-light: #eaf0ff;
-  --secondary: #1f9d8b;
-  --accent: #f6b73c;
-  --text: #1d2a39;
-  --muted: #5e6a7a;
-  --line: #dfe7f5;
-  --shadow: 0 18px 45px rgba(17, 60, 140, 0.12);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: "Cairo", sans-serif;
-  background: linear-gradient(180deg, #eef5ff 0%, #f7f9fd 100%);
-  color: var(--text);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input,
-select {
-  font: inherit;
-}
-
-.container {
-  width: min(1150px, calc(100% - 32px));
-  margin: 0 auto;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 88px;
-  gap: 20px;
-}
-
-.brand-wrap {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--primary), #2b6df4);
-  color: white;
-  font-weight: 800;
-  font-size: 1.7rem;
-}
-
-.eyebrow,
-.section-tag,
-.mini-label {
-  margin: 0;
-  color: var(--primary);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 0.74rem;
-}
-
-.brand-wrap h1 {
-  margin: 0;
-  font-size: clamp(1.2rem, 2vw, 1.6rem);
-}
-
-.main-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.main-nav a:hover {
-  color: var(--primary);
-}
-
-.hero {
-  padding: 64px 0 32px;
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 0.9fr;
-  gap: 28px;
-  align-items: center;
-}
-
-.hero-copy h2 {
-  margin: 12px 0 18px;
-  font-size: clamp(2.1rem, 4vw, 4rem);
-  line-height: 1.15;
-}
-
-.hero-copy p {
-  color: var(--muted);
-  line-height: 1.9;
-  font-size: 1.06rem;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.primary-btn,
-.secondary-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding: 0 22px;
-  border-radius: 12px;
-  font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, var(--primary), #2f77f4);
-  color: white;
-  box-shadow: var(--shadow);
-}
-
-.secondary-btn {
-  border: 1px solid var(--line);
-  background: white;
-  color: var(--text);
-}
-
-.primary-btn:hover,
-.secondary-btn:hover,
-button:hover {
-  transform: translateY(-1px);
-}
-
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.stat-box {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 18px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
-}
-
-.stat-box strong {
-  font-size: clamp(1.3rem, 2vw, 2rem);
-  color: var(--primary);
-}
-
-.stat-box span {
-  color: var(--muted);
-}
-
-.hero-panel {
-  display: flex;
-  justify-content: center;
-}
-
-.panel-card {
-  width: min(100%, 430px);
-  background: linear-gradient(180deg, #111d40, #1a2c5a);
-  color: white;
-  border-radius: 26px;
-  padding: 28px 24px;
-  box-shadow: var(--shadow);
-}
-
-.panel-card ul {
-  margin: 18px 0 0;
-  padding-left: 20px;
-  line-height: 2.2;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.controls {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 18px;
-  margin-top: 20px;
-  margin-bottom: 14px;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.filter-group label {
-  font-weight: 700;
-  color: var(--text);
-}
-
-.filter-group select,
-.filter-group input,
-.planner-box input,
-.planner-box select {
-  border: 1px solid var(--line);
-  background: white;
-  border-radius: 12px;
-  min-height: 52px;
-  padding: 0 16px;
-  color: var(--text);
-  outline: none;
-}
-
-.filter-group input:focus,
-.filter-group select:focus,
-.planner-box input:focus,
-.planner-box select:focus {
-  border-color: rgba(17, 60, 140, 0.45);
-  box-shadow: 0 0 0 4px rgba(17, 60, 140, 0.08);
-}
-
-.content-section {
-  padding: 28px 0 12px;
-}
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 18px;
-}
-
-.section-heading h3 {
-  margin: 8px 0 0;
-  font-size: clamp(1.6rem, 2vw, 2.3rem);
-}
-
-.subject-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 22px;
-}
-
-.subject-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: 22px 18px;
-  box-shadow: 0 12px 26px rgba(17, 60, 140, 0.05);
-}
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.subject-stream {
-  display: inline-flex;
-  background: var(--primary-light);
-  color: var(--primary);
-  border-radius: 999px;
-  padding: 7px 12px;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.subject-pill {
-  color: var(--secondary);
-  background: rgba(31, 157, 139, 0.1);
-  border-radius: 999px;
-  padding: 7px 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.subject-title {
-  margin: 0;
-  font-size: 1.45rem;
-}
-
-.subject-description {
-  color: var(--muted);
-  line-height: 1.8;
-  margin: 14px 0 12px;
-}
-
-.focus-list {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--text);
-  line-height: 1.8;
-}
-
-.unit-preview {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-
-.unit-preview h5 {
-  margin: 0 0 10px;
-  color: var(--primary);
-  font-size: 0.96rem;
-}
-
-.unit-preview ul {
-  margin: 0;
-  padding-left: 18px;
-  line-height: 1.8;
-  color: var(--muted);
-}
-
-.plan-grid {
-  display: grid;
-  grid-template-columns: 0.9fr 1.5fr;
-  gap: 20px;
-}
-
-.planner-box {
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 10px 20px rgba(17, 60, 140, 0.04);
-}
-
-.planner-box label {
-  display: block;
-  margin: 18px 0 8px;
-  font-weight: 700;
-}
-
-.planner-box button {
-  border: none;
-  margin-top: 20px;
-  width: 100%;
-  cursor: pointer;
-}
-
-.output-box h4 {
-  margin-top: 0;
-  font-size: 1.45rem;
-}
-
-.study-plan {
-  margin: 0;
-  padding-left: 18px;
-  line-height: 2;
-  color: var(--muted);
-}
-
-.resource-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
-}
-
-.resource-item {
-  background: linear-gradient(180deg, #f9fbff, #edf4ff);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 18px 16px;
-}
-
-.resource-item h4 {
-  margin: 0 0 8px;
-  color: var(--primary);
-}
-
-.resource-item p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.empty-state {
-  background: #fff7ea;
-  border: 1px solid #f4d8a5;
-  color: #8e5f00;
-  border-radius: 14px;
-  padding: 18px 20px;
-}
-
-@media (max-width: 900px) {
-  .hero-grid,
-  .plan-grid,
-  .controls {
-    grid-template-columns: 1fr;
-  }
-
-  .main-nav {
-    display: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .hero {
-    padding-top: 42px;
-  }
-
-  .stats-row {
-    grid-template-columns: 1fr;
-  }
-
-  .brand-wrap {
-    gap: 10px;
-  }
-
-  .brand-mark {
-    width: 42px;
-    height: 42px;
-  }
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="منصة تعليمية شاملة لمنهج البكالوريا المصرية 2027 مع شرح تفصيلي، اختبارات شهرية وشاملة، وأدوات تعليمية متاحة دون إنترنت."
+    />
+    <title>منصة البكالوريا 2027</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="manifest" href="manifest.webmanifest" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand-wrap">
+          <div class="brand-mark">ب</div>
+          <div>
+            <p class="eyebrow">Egyptian Baccalaureate</p>
+            <h1>منصة 2027</h1>
+          </div>
+        </div>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#overview">نظرة عامة</a>
+          <a href="#subjects">المواد</a>
+          <a href="#exams">الاختبارات</a>
+          <a href="#dashboard">لوحة التحكم</a>
+          <a href="#sources">المصادر</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="section-tag">منصة تعليمية مستقلة متكاملة</p>
+            <h2>دراسة موحدة، شرح تفصيلي، ومراجعة ذكية للبكالوريا المصرية 2027</h2>
+            <p>
+              تقدم المنصة خريطة شاملة للمناهج الدراسية، شرحًا مفصلًا للوحدات، أهدافًا
+              تعليمية واضحة، وملفات تقييمية تفاعلية تشمل اختبارات الشهر والاختبارات
+              الشاملة. كما توفر محتوى مستندًا إلى مصادر تعليمية معروفة مثل الأضواء، كيان,
+              المعاصر، الفائز، محمد صلاح، أحمد السقا، والمصدر، مع إمكانية الوصول بدون
+              إنترنت عبر التخزين المحلي.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#subjects" class="primary-btn">استعرض المواد</a>
+              <a href="#exams" class="secondary-btn">ابدأ الاختبار</a>
+            </div>
+
+            <div class="stats-row">
+              <div class="stat-box">
+                <strong id="stat-total-subjects">0</strong>
+                <span>مواد</span>
+              </div>
+              <div class="stat-box">
+                <strong id="stat-streams">0</strong>
+                <span>مسارات</span>
+              </div>
+              <div class="stat-box">
+                <strong id="stat-topics">0</strong>
+                <span>وحدات تعليمية</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-panel">
+            <div class="panel-card">
+              <p class="mini-label">ماذا تتضمن المنصة؟</p>
+              <ul>
+                <li>منهج كامل منظم حسب المسارات</li>
+                <li>شرح تفصيلي لكل موضوع</li>
+                <li>اختبارات شهرية وشاملة</li>
+                <li>تقييم فوري مع درجات وتحليل</li>
+                <li>وصول دون إنترنت ولوحة تحكم</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls container" aria-label="Subject filters">
+        <div class="filter-group">
+          <label for="streamFilter">اختر المسار</label>
+          <select id="streamFilter">
+            <option value="all">الكل</option>
+          </select>
+        </div>
+
+        <div class="filter-group search-group">
+          <label for="searchInput">ابحث عن مادة أو وحدة</label>
+          <input id="searchInput" type="text" placeholder="اكتب اسم المادة أو الوحدة..." />
+        </div>
+      </section>
+
+      <section id="subjects" class="container content-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">الخريطة التعليمية</p>
+            <h3>المواد الدراسية والوحدات الدراسية</h3>
+          </div>
+        </div>
+
+        <div id="subjectList" class="subject-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="exams" class="container content-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">التقييم</p>
+            <h3>اختبارات شهرية وشاملة</h3>
+          </div>
+        </div>
+
+        <div id="examList" class="exam-grid"></div>
+        <div id="examRunner" class="exam-runner hidden"></div>
+      </section>
+
+      <section id="dashboard" class="container content-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">لوحة التحكم</p>
+            <h3>مؤشرات الأداء والتقدم</h3>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-tile">
+            <span class="tile-label">المواد المتاحة</span>
+            <strong id="dashboard-subjects">0</strong>
+          </div>
+          <div class="dashboard-tile">
+            <span class="tile-label">اختبارات الشهر</span>
+            <strong id="dashboard-monthly">0</strong>
+          </div>
+          <div class="dashboard-tile">
+            <span class="tile-label">اختبارات شاملة</span>
+            <strong id="dashboard-comprehensive">0</strong>
+          </div>
+          <div class="dashboard-tile">
+            <span class="tile-label">الوصول دون إنترنت</span>
+            <strong id="dashboard-offline">مفعل</strong>
+          </div>
+        </div>
+
+        <div id="studyPlanOutput" class="study-plan-box"></div>
+      </section>
+
+      <section id="sources" class="container content-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">المحتوى التعليمي</p>
+            <h3>مصادر واستراتيجيات المراجعة</h3>
+          </div>
+        </div>
+
+        <div id="resourceList" class="resource-list"></div>
+      </section>
+    </main>
+
+    <template id="subjectTemplate">
+      <article class="subject-card">
+        <div class="card-top">
+          <span class="subject-stream"></span>
+          <span class="subject-pill">شرح تفصيلي</span>
+        </div>
+        <h4 class="subject-title"></h4>
+        <p class="subject-description"></p>
+
+        <div class="source-tags"></div>
+
+        <div class="objective-box">
+          <h5>الأهداف التعليمية</h5>
+          <ul class="focus-list"></ul>
+        </div>
+
+        <div class="unit-preview"></div>
+      </article>
+    </template>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
