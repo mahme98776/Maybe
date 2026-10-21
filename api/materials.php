@@ -1,175 +1,282 @@
-const state = {
-  allSubjects: [],
-  filters: {
-    stream: 'all',
-    search: '',
-  },
-};
+<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
 
-const subjectList = document.getElementById('subjectList');
-const streamFilter = document.getElementById('streamFilter');
-const searchInput = document.getElementById('searchInput');
-const studyStream = document.getElementById('studyStream');
-const studyHours = document.getElementById('studyHours');
-const studyPlanOutput = document.getElementById('studyPlanOutput');
-const resourceList = document.getElementById('resourceList');
-const subjectTemplate = document.getElementById('subjectTemplate');
+$streams = [
+  ['value' => 'science', 'label' => 'علمي'],
+  ['value' => 'literary', 'label' => 'أدبي'],
+  ['value' => 'commercial', 'label' => 'تجاري'],
+];
 
-async function loadData() {
-  try {
-    const response = await fetch('api/materials.php');
-    if (!response.ok) {
-      throw new Error('Failed to load data from API');
-    }
+$subjects = [
+  [
+    'slug' => 'arabic-language',
+    'name' => 'اللغة العربية',
+    'stream' => 'literary',
+    'streamLabel' => 'أدبي',
+    'description' => 'تُعنى اللغة العربية بفهم النصوص، تحليلها، قواعدها، والتعبير، وتغرس مهارة النقد والتحليل اللغوي.',
+    'objectives' => [
+      'فهم المعنى، الأسلوب، والغرض البلاغي للنصوص.',
+      'تطبيق القواعد النحوية والصرفية في سياقات مناسبة.',
+      'إعداد إجابة منظمة ومتماسكة في الأسئلة المقالية.',
+      'تطوير مهارة القراءة النقدية والكتابة الفصيحة.',
+    ],
+    'sources' => ['الأضواء', 'الكيان', 'المعاصر'],
+    'units' => [
+      ['title' => 'التحليل النصي والبلاغة', 'summary' => 'فهم النص من خلال المعنى، الأسلوب، والغاية الأدبية.'],
+      ['title' => 'النحو والصرف', 'summary' => 'تطبيق قواعد اللغة العربية في نصوص وأمثلة متنوعة.'],
+      ['title' => 'الكتابة وملاءمة التعبير', 'summary' => 'صياغة إجابة واضحة ومتماسكة ومقروءة.'],
+      ['title' => 'المعنى والوظيفة الأدبية', 'summary' => 'ربط النص بمقاصده وخصائصه الفنية.'],
+    ],
+  ],
+  [
+    'slug' => 'english-language',
+    'name' => 'اللغة الإنجليزية',
+    'stream' => 'science',
+    'streamLabel' => 'علمي',
+    'description' => 'تراعي اللغة الإنجليزية مهارات القراءة والفهم، القواعد، والمفردات، مع بناء الإجابة على أسئلة الامتحان.',
+    'objectives' => [
+      'تمييز فكرة النص الرئيسة ودعمها بالأدلة.',
+      'استخدام القواعد والمفردات في جمل مناسبة.',
+      'كتابة إجابة منضبطة في أسئلة التعبير.',
+      'تطبيق مهارات الاستدلال في القراءة.',
+    ],
+    'sources' => ['الفائز', 'المصدر', 'محمد صلاح'],
+    'units' => [
+      ['title' => 'Reading comprehension', 'summary' => 'قراءة النص وفهم الفكرة العامة والمفاهيم الرئيسية.'],
+      ['title' => 'Grammar and transformation', 'summary' => 'تطبيق القواعد اللغوية في الجمل والتحويلات.'],
+      ['title' => 'Writing and structured answers', 'summary' => 'استجابة منضبطة للأسئلة المقالية والاختيارية.'],
+      ['title' => 'Vocabulary in context', 'summary' => 'استنتاج المعنى من السياق في النصوص المختلفة.'],
+    ],
+  ],
+  [
+    'slug' => 'mathematics',
+    'name' => 'الرياضيات',
+    'stream' => 'science',
+    'streamLabel' => 'علمي',
+    'description' => 'تمتد مادة الرياضيات من الجبر والهندسة والدوال إلى مهارات حل المسائل والتحليل المنطقي.',
+    'objectives' => [
+      'فهم المفاهيم واستعمال التعريفات والخصائص.',
+      'حل المسائل باستخدام خطوات واضحة ومبررة.',
+      'ربط بين الجبر والهندسة والوظائف.',
+      'استخدام المنطق في التفكيك والتحليل.',
+    ],
+    'sources' => ['محمد صلاح', 'المصدر', 'الكيان'],
+    'units' => [
+      ['title' => 'الدوال والرسوم', 'summary' => 'استنتاج الميل والتمثيل البياني للدوال.'],
+      ['title' => 'الجبر والتحليل', 'summary' => 'حل المعادلات والمتباينات بأسلوب منظم.'],
+      ['title' => 'الهندسة والقياس', 'summary' => 'تطبيق القوانين الهندسية على الأشكال والمسائل.'],
+      ['title' => 'المسائل التطبيقية', 'summary' => 'حل مسائل من الواقع باستخدام أسس رياضية.'],
+    ],
+  ],
+  [
+    'slug' => 'physics',
+    'name' => 'الفيزياء',
+    'stream' => 'science',
+    'streamLabel' => 'علمي',
+    'description' => 'تعتمد الفيزياء على تفسير الظواهر الطبيعية من خلال القوانين والمقاييس والتمثيل الرياضي.',
+    'objectives' => [
+      'تفسير القوانين العلمية في ضوء الخبرة والتجربة.',
+      'استخدام المعادلات والرموز بدقة.',
+      'تحليل الرسوم البيانية والمقاييس التجريبية.',
+      'ربط الظاهرة بالحياة اليومية.',
+    ],
+    'sources' => ['المصدر', 'الأضواء', 'الفائز'],
+    'units' => [
+      ['title' => 'الحركة والقوة', 'summary' => 'مقارنة السرعة والتسارع وتأثير القوة.'],
+      ['title' => 'الطاقة والعمل', 'summary' => 'فهم التحول بين الطاقة وشغل القوة.'],
+      ['title' => 'الكهرباء والمربعات', 'summary' => 'تطبيق قوانين التيار والجهد والمقاومة.'],
+      ['title' => 'الاهتزازات والموجات', 'summary' => 'رصد الخصائص الأساسية للموجات والاهتزاز.'],
+    ],
+  ],
+  [
+    'slug' => 'chemistry',
+    'name' => 'الكيمياء',
+    'stream' => 'science',
+    'streamLabel' => 'علمي',
+    'description' => 'يُركّز محتوى الكيمياء على التفاعلات، التركيب، والقوانين الكيميائية مع الربط بين النظرية والتجربة.',
+    'objectives' => [
+      'فهم التركيب الذري والعلاقات الكيميائية.',
+      'تفسير التفاعلات والتوازنات.',
+      'التعرف على الخصائص والطرق التجريبية.',
+      'حل مسائل الحساب الكيميائي بدقة.',
+    ],
+    'sources' => ['المصدر', 'أحمد السقا', 'الكيان'],
+    'units' => [
+      ['title' => 'الذرة والتركيب', 'summary' => 'فهم تكوين الذرات والعناصر والروابط.'],
+      ['title' => 'التفاعلات الكيميائية', 'summary' => 'تصنيف التفاعلات وتحديد العوامل المؤثرة.'],
+      ['title' => 'المحاليل والتوازن', 'summary' => 'ربط التراكيز والتوازن الكيميائي.'],
+      ['title' => 'التحليل الكيميائي', 'summary' => 'استنتاج النتائج من البيانات التجريبية.'],
+    ],
+  ],
+  [
+    'slug' => 'biology',
+    'name' => 'الأحياء',
+    'stream' => 'science',
+    'streamLabel' => 'علمي',
+    'description' => 'تتنوع وحدات الأحياء بين تركيب الخلايا، الأنظمة الحيوية، والتكاثر، مع التوازن بين النظريات والرسوم.',
+    'objectives' => [
+      'تمييز مكونات الخلية ووظائفها.',
+      'فهم الأنظمة الحيوية، التوازن، والتكيف.',
+      'تفسير الرسوم والأشكال البيولوجية.',
+      'استخدام المصطلحات العلمية بدقة.',
+    ],
+    'sources' => ['الكيان', 'المعاصر', 'المصدر'],
+    'units' => [
+      ['title' => 'الخلية والحياة', 'summary' => 'تحديد مكونات الخلية وارتباطها بالوظيفة.'],
+      ['title' => 'التغذية والتنفس', 'summary' => 'ربط العمليات الحيوية بالحياة اليومية.'],
+      ['title' => 'التكاثر والوراثة', 'summary' => 'فهم انتقال الصفات ودور الجينات.'],
+      ['title' => 'البيئة والتكيف', 'summary' => 'تفسير التوازن البيئي والاستجابة للتغيرات.'],
+    ],
+  ],
+  [
+    'slug' => 'history',
+    'name' => 'تاريخ',
+    'stream' => 'literary',
+    'streamLabel' => 'أدبي',
+    'description' => 'يدرس التاريخ التحولات السياسية والاجتماعية والثقافية ويُركز على التسلسل الزمني وفهم الأسباب والنتائج.',
+    'objectives' => [
+      'تحديد المراحل الزمنية وأهم الأحداث.',
+      'تحليل الأثر الاجتماعي والسياسي للأحداث.',
+      'التفريق بين المعلومة والحجة في الإجابة.',
+      'صياغة إجابة متوازنة لمسائل التاريخ.',
+    ],
+    'sources' => ['المعاصر', 'الأضواء', 'الكيان'],
+    'units' => [
+      ['title' => 'الحضارات القديمة', 'summary' => 'فهم المراحل الحضارية وعلاقاتها في العالم القديم.'],
+      ['title' => 'التاريخ العربي المعاصر', 'summary' => 'تعرف التحولات السياسية والاجتماعية في الوطن العربي.'],
+      ['title' => 'الثورات والهوية', 'summary' => 'تحليل الأسباب والتأثيرات على المجتمع.'],
+      ['title' => 'التحولات الاجتماعية', 'summary' => 'تأثير المجتمعات على الحراك السياسي والثقافي.'],
+    ],
+  ],
+  [
+    'slug' => 'geography',
+    'name' => 'الجغرافيا',
+    'stream' => 'literary',
+    'streamLabel' => 'أدبي',
+    'description' => 'تجمع الجغرافيا بين المكان والبيئة والأنماط الاقتصادية والاجتماعية، وتُبرز القراءة المتكاملة للبيانات.',
+    'objectives' => [
+      'قراءة الخرائط والرسوم البيانية.',
+      'ربط الأماكن بالظروف الطبيعية والبشرية.',
+      'تحليل الأنماط المكانية والاقتصادية.',
+      'تفسير التغيرات البيئية والتحضر.',
+    ],
+    'sources' => ['الفائز', 'المصدر', 'الكيان'],
+    'units' => [
+      ['title' => 'المناخ والسطح', 'summary' => 'فهم الخصائص الطبيعية وتأثيرها على المناطق.'],
+      ['title' => 'السكان والتنمية', 'summary' => 'تفسير العلاقة بين السكان والموارد والأماكن.'],
+      ['title' => 'الموارد والبيئة', 'summary' => 'تحليل الموارد الطبيعية والحدود البيئية.'],
+      ['title' => 'المدن والاقتصاد', 'summary' => 'رصد أثر العوامل الاقتصادية على التوزيع العمراني.'],
+    ],
+  ],
+  [
+    'slug' => 'economics',
+    'name' => 'الاقتصاد والتجارة',
+    'stream' => 'commercial',
+    'streamLabel' => 'تجاري',
+    'description' => 'تعلم الاقتصاد والتجارة مبادئ السوق، المال، الإنتاج، والأنماط التجارية، مع الاهتمام بالقراءة التحليلية.',
+    'objectives' => [
+      'فهم مبادئ العرض والطلب والسوق.',
+      'تحليل القرارات التجارية والمالية.',
+      'استخدام الرسوم والبيانات في التبرير.',
+      'ربط النشاط الاقتصادي بالواقع العملي.',
+    ],
+    'sources' => ['المصدر', 'أحمد السقا', 'الفائز'],
+    'units' => [
+      ['title' => 'السوق وطلب المستهلك', 'summary' => 'تفسير العلاقة بين السعر والطلب في السوق.'],
+      ['title' => 'التمويل والميزانية', 'summary' => 'تحليل مصادر التمويل والإنفاق الحكومي.'],
+      ['title' => 'الإنتاج والتجارة', 'summary' => 'فهم أثر الإنتاج والتوزيع على الأسعار.'],
+      ['title' => 'الاستثمار والسياسات', 'summary' => 'ربط السياسات الاقتصادية بالاستثمار والتنمية.'],
+    ],
+  ],
+  [
+    'slug' => 'accounting',
+    'name' => 'المحاسبة',
+    'stream' => 'commercial',
+    'streamLabel' => 'تجاري',
+    'description' => 'تركّز المحاسبة على القوائم، الحسابات، التوثيق المالي، وفهم حركة الأرقام في المنشآت.',
+    'objectives' => [
+      'تسجيل العمليات المالية بدقة.',
+      'فهم القوائم والموازنة.',
+      'تمييز بين الإيرادات والنفقات.',
+      'تطبيق أساسيات الدورة المحاسبية.',
+    ],
+    'sources' => ['المصدر', 'محمد صلاح', 'الكيان'],
+    'units' => [
+      ['title' => 'أساسيات المحاسبة', 'summary' => 'فهم القيد، الحساب، والميزان الأولي.'],
+      ['title' => 'دفاتر اليومية', 'summary' => 'تسجيل العمليات المالية في ضوء الإجراءات المهنية.'],
+      ['title' => 'ميزان المراجعة', 'summary' => 'مراجعة القوائم وترتيب الحسابات.'],
+      ['title' => 'القوائم المالية', 'summary' => 'تجميع البيانات لتقديم صورة مالية دقيقة.'],
+    ],
+  ],
+];
 
-    const json = await response.json();
-    state.allSubjects = json.subjects || [];
-    renderStreamOptions(json.streams || []);
-    renderSubjects();
-    renderResources(json.resources || []);
-    updateStats(json);
-  } catch (error) {
-    subjectList.innerHTML = '<div class="empty-state">The subject data could not be loaded. Please ensure the PHP API is available.</div>';
-    console.error(error);
-  }
-}
+$resources = [
+  ['title' => 'خطط مراجعة شهرية', 'description' => 'تخطيط أسبوعي يركز على التمهيد، التمرين، المراجعة، والتقييم.'],
+  ['title' => 'استراتيجيات حل الأسئلة', 'description' => 'توضيح طريقة قراءة السؤال، تحديد المطلوب، ومقارنة البدائل.'],
+  ['title' => 'مراجع داعمة', 'description' => 'العودة إلى الأضواء، كيان، المعاصر، الفائز، محمد صلاح، أحمد السقا، والمصدر.'],
+  ['title' => 'مراجعة ذكية', 'description' => 'استخدام الخرائط الذهنية، الملخصات القصيرة، والملفات المحلية.'],
+];
 
-function updateStats(json) {
-  const totalSubjects = json.subjects?.length || 0;
-  const streamCount = json.streams?.length || 0;
-  const topicCount = json.subjects?.reduce((sum, subject) => sum + (subject.units?.length || 0), 0) || 0;
+$exams = [
+  [
+    'id' => 'monthly-english',
+    'title' => 'اختبار الشهر – اللغة الإنجليزية',
+    'type' => 'monthly',
+    'description' => 'اختبار قصير يركز على القراءة، القواعد، والمفردات.',
+    'questions' => [
+      ['prompt' => 'أي عبارة تعبر عن الفكرة العامة للنص؟', 'choices' => ['اللغة الإنجليزية تلعب دورًا رئيسيًا في التواصل العالمي', 'اللغة الإنجليزية صعبة وغير ضرورية', 'اللغة الإنجليزية تُدرس فقط في المدارس الثانوية', 'اللغة الإنجليزية لا تنفع في الحياة'], 'answer' => 'اللغة الإنجليزية تلعب دورًا رئيسيًا في التواصل العالمي'],
+      ['prompt' => 'ما معنى كلمة “context” في الجملة: “The context of the passage is important”؟', 'choices' => ['السياق', 'اللغة', 'العنوان', 'الكلمة'], 'answer' => 'السياق'],
+      ['prompt' => 'أي جملة نحوية صحيحة؟', 'choices' => ['She go to school every day.', 'She goes to school every day.', 'She going to school every day.', 'She gone to school every day.'], 'answer' => 'She goes to school every day.'],
+    ],
+  ],
+  [
+    'id' => 'monthly-math',
+    'title' => 'اختبار الشهر – الرياضيات',
+    'type' => 'monthly',
+    'description' => 'اختبار تدريبي على الجبر، الدوال، والمسائل التطبيقية.',
+    'questions' => [
+      ['prompt' => 'إذا كانت المعادلة 2x + 4 = 12 فماذا يساوي x؟', 'choices' => ['2', '3', '4', '5'], 'answer' => '4'],
+      ['prompt' => 'ما قيمة 3² + 4²؟', 'choices' => ['12', '17', '25', '20'], 'answer' => '25'],
+      ['prompt' => 'أي بيان صحيح عن الدالة الخطية؟', 'choices' => ['تمثيلها يساوي خطًا مستقيمًا', 'تمثيلها دائري', 'لا يوجد لها ميل', 'هي تعبير جبري لا يكتب'], 'answer' => 'تمثيلها يساوي خطًا مستقيمًا'],
+    ],
+  ],
+  [
+    'id' => 'comprehensive-physics',
+    'title' => 'اختبار شامل – الفيزياء',
+    'type' => 'comprehensive',
+    'description' => 'اختبار شامل يضم أسئلة على الحركة، الطاقة، والكهرباء.',
+    'questions' => [
+      ['prompt' => 'ما العلاقة بين القوة والحركة؟', 'choices' => ['تسبب التغير في السرعة أو الاتجاه', 'لا تؤثر على الجسم', 'تعتمد فقط على الحجم', 'تحدث فقط في الهواء'], 'answer' => 'تسبب التغير في السرعة أو الاتجاه'],
+      ['prompt' => 'ما الوحدة المستخدمة لقياس الطاقة؟', 'choices' => ['الواط', 'الجول', 'الثانية', 'النيوتن'], 'answer' => 'الجول'],
+      ['prompt' => 'أي مبدأ يوضح أن الطاقة لا تفنى؟', 'choices' => ['حفظ الطاقة', 'قانون نيوتن', 'قانون كولوم', 'قانون أوم'], 'answer' => 'حفظ الطاقة'],
+    ],
+  ],
+  [
+    'id' => 'comprehensive-arabic',
+    'title' => 'اختبار شامل – اللغة العربية',
+    'type' => 'comprehensive',
+    'description' => 'اختبار يختبر مهارات القراءة، القواعد، والتعبير.',
+    'questions' => [
+      ['prompt' => 'ما الهدف من تحليل النص الأدبي؟', 'choices' => ['فهم المعنى والأسلوب والغرض', 'حفظ الحروف فقط', 'تحديد الأرقام', 'تكرار الجملة'], 'answer' => 'فهم المعنى والأسلوب والغرض'],
+      ['prompt' => 'أي الجمل تعبر عن كتابة واضحة؟', 'choices' => ['الجواب مختصر وغير منظم', 'الجواب منظم ويعرض الفكرة الأساسية', 'الجواب لا يحتاج إلى شرح', 'الجواب غير مرتب'], 'answer' => 'الجواب منظم ويعرض الفكرة الأساسية'],
+      ['prompt' => 'ماذا يفيد تحليل السياق في القراءة؟', 'choices' => ['يساعد على فهم المعنى المقصود', 'يؤدي إلى حذف الكلمات', 'لا علاقة له بالنص', 'يقلل فهم النص'], 'answer' => 'يساعد على فهم المعنى المقصود'],
+    ],
+  ],
+];
 
-  document.getElementById('stat-total-subjects').textContent = totalSubjects;
-  document.getElementById('stat-streams').textContent = streamCount;
-  document.getElementById('stat-topics').textContent = topicCount;
-}
+$data = [
+  'year' => 2027,
+  'updated' => '2026-10-21',
+  'streams' => $streams,
+  'subjects' => $subjects,
+  'resources' => $resources,
+  'exams' => $exams,
+  'offline' => true,
+  'dashboard' => [
+    'learningMode' => 'offline-first',
+    'supports' => ['منهج كامل', 'اختبارات شهرية', 'اختبارات شاملة', 'وصول دون إنترنت', 'لوحة متابعة'],
+  ],
+];
 
-function renderStreamOptions(streams) {
-  const options = ['<option value="all">All streams</option>'];
-  streams.forEach((stream) => {
-    options.push(`<option value="${stream.value}">${stream.label}</option>`);
-  });
-
-  streamFilter.innerHTML = options.join('');
-  studyStream.innerHTML = `<option value="all">All</option>${streams
-    .map((stream) => `<option value="${stream.value}">${stream.label}</option>`)
-    .join('')}`;
-}
-
-function renderSubjects() {
-  const filtered = state.allSubjects.filter((subject) => {
-    const streamMatches = state.filters.stream === 'all' || subject.stream === state.filters.stream;
-    const searchText = state.filters.search.trim().toLowerCase();
-    const searchMatches =
-      !searchText ||
-      subject.name.toLowerCase().includes(searchText) ||
-      subject.description.toLowerCase().includes(searchText) ||
-      subject.units.some((unit) => unit.title.toLowerCase().includes(searchText));
-
-    return streamMatches && searchMatches;
-  });
-
-  if (!filtered.length) {
-    subjectList.innerHTML = '<div class="empty-state">No matching subjects or topics were found. Try a different search or stream filter.</div>';
-    return;
-  }
-
-  subjectList.innerHTML = '';
-
-  filtered.forEach((subject) => {
-    const fragment = subjectTemplate.content.cloneNode(true);
-    const article = fragment.querySelector('.subject-card');
-    const stream = fragment.querySelector('.subject-stream');
-    const title = fragment.querySelector('.subject-title');
-    const description = fragment.querySelector('.subject-description');
-    const focusList = fragment.querySelector('.focus-list');
-    const unitPreview = fragment.querySelector('.unit-preview');
-
-    stream.textContent = subject.streamLabel;
-    title.textContent = subject.name;
-    description.textContent = subject.description;
-
-    subject.objectives.forEach((objective) => {
-      const li = document.createElement('li');
-      li.textContent = objective;
-      focusList.appendChild(li);
-    });
-
-    const firstTwoUnits = subject.units.slice(0, 2);
-    const unitHtml = document.createElement('div');
-    const heading = document.createElement('h5');
-    heading.textContent = 'Core teaching units';
-    unitHtml.appendChild(heading);
-
-    const unitList = document.createElement('ul');
-    firstTwoUnits.forEach((unit) => {
-      const li = document.createElement('li');
-      li.textContent = unit.title;
-      unitList.appendChild(li);
-    });
-
-    unitHtml.appendChild(unitList);
-    unitPreview.appendChild(unitHtml);
-
-    article.dataset.subject = subject.slug;
-    subjectList.appendChild(fragment);
-  });
-}
-
-function renderResources(resources) {
-  if (!resources.length) {
-    resourceList.innerHTML = '<div class="empty-state">No learning resources are available yet for this curriculum view.</div>';
-    return;
-  }
-
-  resourceList.innerHTML = resources
-    .map(
-      (resource) => `
-        <div class="resource-item">
-          <h4>${resource.title}</h4>
-          <p>${resource.description}</p>
-        </div>
-      `
-    )
-    .join('');
-}
-
-function generatePlan() {
-  const selectedStream = studyStream.value;
-  const hours = Number(studyHours.value) || 3;
-  const relevantSubjects = state.allSubjects.filter((subject) => {
-    if (selectedStream === 'all') return true;
-    return subject.stream === selectedStream;
-  });
-
-  if (!relevantSubjects.length) {
-    studyPlanOutput.innerHTML = '<p class="empty-state">No subject data is available for the selected stream.</p>';
-    return;
-  }
-
-  const plan = [
-    `Day 1: Review the conceptual foundations of ${relevantSubjects[0].name}. Study for ${hours} hours and complete one detailed summary.` ,
-    `Day 2: Work on ${relevantSubjects[Math.min(1, relevantSubjects.length - 1)].name} by comparing examples, definitions, and short-answer practice.`,
-    `Day 3: Analyze a major unit from ${relevantSubjects[Math.min(2, relevantSubjects.length - 1)].name} and write explanations in your own words.`,
-    `Day 4: Complete timed practice questions and review errors for the chosen stream using official-style tasks and explanations.`,
-    `Day 5: Consolidate your notes and create a concept map linking key ideas, definitions, and exam techniques.`,
-    `Day 6: Focus on the most difficult subject by practicing short response and extended response questions.`,
-    `Day 7: Full revision and self-assessment cycle: revisit weak areas and refresh your summary sheets.`,
-  ];
-
-  studyPlanOutput.innerHTML = `<ul class="study-plan">${plan.map((item) => `<li>${item}</li>`).join('')}</ul>`;
-}
-
-streamFilter.addEventListener('change', (event) => {
-  state.filters.stream = event.target.value;
-  renderSubjects();
-});
-
-searchInput.addEventListener('input', (event) => {
-  state.filters.search = event.target.value;
-  renderSubjects();
-});
-
-document.getElementById('generatePlanBtn').addEventListener('click', generatePlan);
-
-loadData();
+echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
