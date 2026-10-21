@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Egyptian Baccalaureate 2027 Study Hub</title>
+    <meta
+      name="description"
+      content="Interactive educational website for Egyptian Baccalaureate 2027 students based on released materials and structured study pathways."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand-wrap">
+          <div class="brand-mark">ب</div>
+          <div>
+            <p class="eyebrow">Egyptian Baccalaureate</p>
+            <h1>2027 Study Hub</h1>
+          </div>
+        </div>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#overview">Overview</a>
+          <a href="#subjects">Subjects</a>
+          <a href="#plan">Study Plan</a>
+          <a href="#resources">Resources</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="overview">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="section-tag">Officially released materials, educationally structured</p>
+            <h2>Comprehensive support for students preparing for the Egyptian Baccalaureate 2027</h2>
+            <p>
+              This platform organizes the Baccalaureate 2027 materials that have been released so far into
+              teaching units, study pathways, learning objectives, and assessment strategies. It is designed to help
+              students understand content deeply rather than memorize fragments without context.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#subjects" class="primary-btn">Explore Subjects</a>
+              <a href="#plan" class="secondary-btn">Build a Study Plan</a>
+            </div>
+
+            <div class="stats-row">
+              <div class="stat-box">
+                <strong id="stat-total-subjects">0</strong>
+                <span>Subjects</span>
+              </div>
+              <div class="stat-box">
+                <strong id="stat-streams">0</strong>
+                <span>Streams</span>
+              </div>
+              <div class="stat-box">
+                <strong id="stat-topics">0</strong>
+                <span>Learning Units</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-panel">
+            <div class="panel-card">
+              <p class="mini-label">Learning approach</p>
+              <ul>
+                <li>Concept-first explanations</li>
+                <li>Curriculum-aligned revision</li>
+                <li>Assessment-informed practice</li>
+                <li>Actionable study routines</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls container" aria-label="Subject filters">
+        <div class="filter-group">
+          <label for="streamFilter">Choose stream</label>
+          <select id="streamFilter">
+            <option value="all">All streams</option>
+          </select>
+        </div>
+
+        <div class="filter-group search-group">
+          <label for="searchInput">Search subject or topic</label>
+          <input id="searchInput" type="text" placeholder="Type a subject or topic..." />
+        </div>
+      </section>
+
+      <section id="subjects" class="container content-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">Curriculum map</p>
+            <h3>Academic subjects and teaching materials</h3>
+          </div>
+        </div>
+
+        <div id="subjectList" class="subject-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="container content-section" id="plan">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">Study system</p>
+            <h3>Build a realistic weekly plan</h3>
+          </div>
+        </div>
+
+        <div class="plan-grid">
+          <div class="planner-box">
+            <label for="studyStream">Select stream</label>
+            <select id="studyStream">
+              <option value="all">All</option>
+            </select>
+
+            <label for="studyHours">Daily study time</label>
+            <input id="studyHours" type="number" min="1" max="8" value="3" />
+
+            <button id="generatePlanBtn" class="primary-btn">Generate plan</button>
+          </div>
+
+          <div class="planner-box output-box">
+            <h4>Recommended study plan</h4>
+            <div id="studyPlanOutput"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container content-section" id="resources">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">Learning support</p>
+            <h3>Recommended learning activities</h3>
+          </div>
+        </div>
+
+        <div id="resourceList" class="resource-list"></div>
+      </section>
+    </main>
+
+    <template id="subjectTemplate">
+      <article class="subject-card">
+        <div class="card-top">
+          <span class="subject-stream"></span>
+          <span class="subject-pill">Guided lesson</span>
+        </div>
+        <h4 class="subject-title"></h4>
+        <p class="subject-description"></p>
+        <ul class="focus-list"></ul>
+        <div class="unit-preview"></div>
+      </article>
+    </template>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
